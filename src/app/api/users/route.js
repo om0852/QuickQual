@@ -61,7 +61,7 @@ export async function POST(request) {
     }
 
     // Check if user already exists
-   W
+   
 
     const user = new User({
       username,
