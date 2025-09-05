@@ -14,7 +14,6 @@ export default function FlappyBird() {
   const [username] = useState("guest");
   const [circleStreak, setCircleStreak] = useState(1);
   const [streakStatus, setStreakStatus] = useState(false);
-  const [showStreakAnimation, setShowStreakAnimation] = useState(false);
   // total score
   const totalScore = circleScore + flappyScore;
   const timeoutRef = useRef(null);
@@ -53,12 +52,7 @@ export default function FlappyBird() {
     setCircleScore((prev) => prev + circleStreak); // ✅ add streak value
     setCircleStreak((prev) => {
       const newStreak = prev + 1;
-      if (newStreak > 5) {
-        setShowStreakAnimation(true);
-        setTimeout(() => setShowStreakAnimation(false), 2000);
-        return 1; // Reset to 1 when streak reaches 5
-      }
-      return newStreak;
+      return newStreak > 5 ? 1 : newStreak; // Reset to 1 when streak reaches 5
     });
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -160,7 +154,7 @@ export default function FlappyBird() {
       update: function () {
         if (state.curr !== state.Play) return;
         // this.x -= dx;
-        this.x = this.x % (this.sprite.width );
+        this.x = this.x % this.sprite.width;
       },
     };
 
@@ -168,12 +162,17 @@ export default function FlappyBird() {
       sprite: new Image(),
       x: 0,
       y: 0,
-      width: 1000,   // sprite width
-      height: 226,  // sprite height
+      width: 1000, // sprite width
+      height: 226, // sprite height
       draw: function (ctx, canvas) {
         // Repeat background until it covers canvas width
-       sctx.drawImage(this.sprite, this.x , this.y+280, this.width, this.height);
-        
+        sctx.drawImage(
+          this.sprite,
+          this.x,
+          this.y + 280,
+          this.width,
+          this.height
+        );
       },
     };
 
@@ -404,36 +403,50 @@ export default function FlappyBird() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-sky-300 via-sky-400 to-sky-500">
-      {/* Animated Clouds Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="cloud cloud-1"></div>
-        <div className="cloud cloud-2"></div>
-        <div className="cloud cloud-3"></div>
-        <div className="cloud cloud-4"></div>
-        <div className="cloud cloud-5"></div>
-      </div>
-
+    <div
+      className="bg-red-500"
+      style={{
+        backgroundImage:
+          "https://framerusercontent.com/images/OFtVkJDGzvUrWhOyI34EOpHcdA.png",
+      }}
+    >
       {/* Score + Timer Display */}
       <div className="absolute top-6 left-6 z-20">
-        <div className="score-card rounded-2xl p-4">
-          <div className="text-3xl font-bold text-gray-800 mb-2 text-center">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl border-2 border-yellow-400 relative overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-yellow-200 to-orange-300 rounded-full -translate-y-8 translate-x-8 opacity-30"></div>
+          <div className="absolute bottom-0 left-0 w-12 h-12 bg-gradient-to-tr from-blue-200 to-blue-300 rounded-full translate-y-6 -translate-x-6 opacity-30"></div>
+
+          {/* Main score */}
+          <div className="text-3xl font-bold text-gray-800 mb-2 text-center relative z-10">
             {totalScore}
           </div>
-          <div className="flex gap-4 text-sm text-gray-600 mb-2">
-            <div className="flex items-center gap-1">
+
+          {/* Score breakdown */}
+          <div className="flex gap-4 text-sm text-gray-600 mb-3 justify-center">
+            <div className="flex items-center gap-1 bg-blue-50 px-2 py-1 rounded-full">
               <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
               <span className="font-semibold">Flappy: {flappyScore}</span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-full">
               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
               <span className="font-semibold">Circles: {circleScore}</span>
             </div>
           </div>
-          <div className={`bg-red-100 border-2 border-red-300 rounded-lg px-3 py-1 text-center ${timer < 60 ? 'timer-warning' : ''}`}>
-            <div className="text-red-600 font-mono text-lg font-bold">
-              ⏰ {formatTime(timer)}
+
+          {/* Timer with warning effect */}
+          <div
+            className={`bg-gradient-to-r from-red-100 to-red-200 border-2 border-red-300 rounded-xl px-3 py-2 text-center relative ${
+              timer < 60 ? "animate-pulse" : ""
+            }`}
+          >
+            <div className="text-red-600 font-mono text-lg font-bold flex items-center justify-center gap-2">
+              <span className="text-xl">⏰</span>
+              <span>{formatTime(timer)}</span>
             </div>
+            {timer < 60 && (
+              <div className="absolute inset-0 bg-red-400 opacity-20 rounded-xl animate-ping"></div>
+            )}
           </div>
         </div>
       </div>
@@ -441,53 +454,53 @@ export default function FlappyBird() {
       {/* Circle */}
       {showCircle && circleScore <= 20 && (
         <div
-          className="absolute w-16 h-16 bg-gradient-to-br from-yellow-300 to-yellow-500 border-4 border-orange-400 rounded-full cursor-pointer flex items-center justify-center text-black font-bold text-lg z-[100] shadow-2xl animate-bounce"
+          className="absolute w-20 h-20 cursor-pointer z-[100] group"
           style={{
-            left: `${circlePosition.x}px`,
-            top: `${circlePosition.y}px`,
-            boxShadow: '0 0 20px rgba(255, 193, 7, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.3)'
+            left: `${circlePosition.x - 8}px`,
+            top: `${circlePosition.y - 8}px`,
           }}
           onClick={handleCircleClick}
         >
-          <div className="text-center">
-            <div className="text-xs">+{circleStreak}</div>
-            <div className="text-xs">⭐</div>
+          {/* Outer glow ring */}
+          <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-orange-400 rounded-full animate-ping opacity-75"></div>
+
+          {/* Main circle with gradient */}
+          <div className="relative w-full h-full bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-500 rounded-full border-4 border-orange-400 shadow-2xl group-hover:scale-110 transition-transform duration-200 flex items-center justify-center">
+            {/* Inner highlight */}
+            <div className="absolute top-1 left-1 w-6 h-6 bg-white/30 rounded-full"></div>
+
+            {/* Streak value */}
+            <div className="relative z-10 text-center">
+              <div className="text-black font-bold text-lg leading-none">
+                +{circleStreak}
+              </div>
+              <div className="text-xs text-orange-700 font-semibold">⭐</div>
+            </div>
+
+            {/* Animated sparkles */}
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-200 rounded-full animate-bounce"></div>
+            <div
+              className="absolute -bottom-1 -left-1 w-2 h-2 bg-orange-200 rounded-full animate-bounce"
+              style={{ animationDelay: "0.2s" }}
+            ></div>
+            <div
+              className="absolute top-1 -left-2 w-2 h-2 bg-yellow-300 rounded-full animate-bounce"
+              style={{ animationDelay: "0.4s" }}
+            ></div>
           </div>
+
+          {/* Click ripple effect */}
+          <div className="absolute inset-0 rounded-full bg-yellow-400 opacity-0 group-active:opacity-50 group-active:scale-150 transition-all duration-150"></div>
         </div>
       )}
 
-      {/* Game Canvas Container */}
-      <div className="flex justify-center items-center min-h-screen p-4">
-        <div className="relative">
-          <div className="absolute -inset-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl shadow-2xl"></div>
-          <canvas
-            ref={canvasRef}
-            id="canvas"
-            width={400}
-            height={600}
-            className="relative z-10 rounded-2xl shadow-xl"
-            style={{ border: "4px solid #fbbf24" }}
-          />
-        </div>
-      </div>
-
-      {/* Floating Score Animation */}
-      {showStreakAnimation && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none">
-          <div className="text-6xl font-bold text-yellow-400 animate-ping">
-            STREAK RESET!
-          </div>
-        </div>
-      )}
-
-      {/* Streak Indicator */}
-      {circleStreak > 1 && !showStreakAnimation && (
-        <div className="absolute top-6 right-6 z-20">
-          <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full shadow-lg font-bold text-lg animate-pulse">
-            🔥 STREAK x{circleStreak}
-          </div>
-        </div>
-      )}
+      <canvas
+        ref={canvasRef}
+        id="canvas"
+        width={400}
+        height={600}
+        style={{ border: "2px solid black" }}
+      />
     </div>
   );
 }
