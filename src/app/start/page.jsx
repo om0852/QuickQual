@@ -29,7 +29,7 @@ export default function StartPage() {
       })
     );
     // Redirect to game page
-    router.push("/");
+    router.push("/game");
   };
 
   return (

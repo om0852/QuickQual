@@ -17,6 +17,8 @@ export default function FlappyBird() {
   // total score
   const totalScore = circleScore + flappyScore;
   const timeoutRef = useRef(null);
+
+  
   // -------- Circle Spawn --------
   const generateRandomPosition = () => {
     const side = Math.random() < 0.5 ? "left" : "right";
