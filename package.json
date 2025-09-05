@@ -9,15 +9,28 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "arrow-keys-react": "1.0.6",
+    "color": "^3.1.2",
+    "mongoose": "^8.18.0",
+    "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.2"
+    "react-responsive": "^8.0.3",
+    "react-scripts": "^3.4.0",
+    "react-spinners": "^0.8.1",
+    "react-spring": "^8.0.27",
+    "react-switch": "^5.0.1",
+    "react-toggle": "^4.1.1",
+    "react-use-gesture": "^7.0.5",
+    "styled-components": "5.0.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
-    "@eslint/eslintrc": "^3"
+    "gh-pages": "^2.2.0",
+    "tailwindcss": "^4",
+    "typescript": "3.3.3"
   }
 }

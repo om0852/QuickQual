@@ -24,3 +24,222 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Flappy Bird Theme Styles */
+.cloud {
+  position: absolute;
+  background: white;
+  border-radius: 50px;
+  opacity: 0.8;
+  animation: float 20s infinite linear;
+}
+
+.cloud:before {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 50px;
+}
+
+.cloud:after {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 50px;
+}
+
+.cloud-1 {
+  width: 100px;
+  height: 40px;
+  top: 20%;
+  left: -100px;
+  animation-duration: 25s;
+}
+
+.cloud-1:before {
+  width: 50px;
+  height: 50px;
+  top: -25px;
+  left: 10px;
+}
+
+.cloud-1:after {
+  width: 60px;
+  height: 40px;
+  top: -15px;
+  right: 10px;
+}
+
+.cloud-2 {
+  width: 80px;
+  height: 30px;
+  top: 40%;
+  left: -80px;
+  animation-duration: 30s;
+  animation-delay: -5s;
+}
+
+.cloud-2:before {
+  width: 40px;
+  height: 40px;
+  top: -20px;
+  left: 15px;
+}
+
+.cloud-2:after {
+  width: 50px;
+  height: 30px;
+  top: -10px;
+  right: 15px;
+}
+
+.cloud-3 {
+  width: 120px;
+  height: 50px;
+  top: 60%;
+  left: -120px;
+  animation-duration: 35s;
+  animation-delay: -10s;
+}
+
+.cloud-3:before {
+  width: 60px;
+  height: 60px;
+  top: -30px;
+  left: 20px;
+}
+
+.cloud-3:after {
+  width: 70px;
+  height: 50px;
+  top: -20px;
+  right: 20px;
+}
+
+.cloud-4 {
+  width: 90px;
+  height: 35px;
+  top: 80%;
+  left: -90px;
+  animation-duration: 28s;
+  animation-delay: -15s;
+}
+
+.cloud-4:before {
+  width: 45px;
+  height: 45px;
+  top: -22px;
+  left: 12px;
+}
+
+.cloud-4:after {
+  width: 55px;
+  height: 35px;
+  top: -12px;
+  right: 12px;
+}
+
+.cloud-5 {
+  width: 70px;
+  height: 25px;
+  top: 10%;
+  left: -70px;
+  animation-duration: 22s;
+  animation-delay: -8s;
+}
+
+.cloud-5:before {
+  width: 35px;
+  height: 35px;
+  top: -17px;
+  left: 10px;
+}
+
+.cloud-5:after {
+  width: 40px;
+  height: 25px;
+  top: -8px;
+  right: 10px;
+}
+
+@keyframes float {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(100vw + 200px));
+  }
+}
+
+/* Score display animations */
+@keyframes scorePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.score-pulse {
+  animation: scorePulse 0.3s ease-in-out;
+}
+
+/* Circle click animation */
+@keyframes circleClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.circle-clicked {
+  animation: circleClick 0.2s ease-in-out;
+}
+
+/* Enhanced Flappy Bird Theme */
+.score-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+  backdrop-filter: blur(10px);
+  border: 2px solid #fbbf24;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.timer-warning {
+  animation: timerPulse 1s infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Canvas glow effect */
+.canvas-glow {
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.5), 0 0 60px rgba(251, 191, 36, 0.3);
+}
+
+/* Streak animation */
+@keyframes streakGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(251, 191, 36, 1), 0 0 40px rgba(251, 191, 36, 0.6);
+  }
+}
+
+.streak-glow {
+  animation: streakGlow 0.5s ease-in-out;
+}
