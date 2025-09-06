@@ -10,11 +10,11 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen w-screen bg-gray-900 relative">
+    <div className="flex justify-between items-center h-screen w-screen bg-gray-900 relative">
       {/* Random Circle */}
 
       {/* Left side area for random circles */}
-      <div id="left-side" className="w-1/4 h-full relative"></div>
+      {/* <div id="left-side" className="w-1/4 h-full relative"></div> */}
 
       {/* Center area with Flappy Bird game */}
       <div className="flex justify-center items-center">

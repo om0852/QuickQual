@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { scoreContext } from "../context/scoreContext";
 
 export default function FlappyBird() {
   const router = useRouter();
@@ -241,6 +242,8 @@ export default function FlappyBird() {
         let r = this.animations[0].sprite.width / 2;
         switch (state.curr) {
           case state.getReady:
+            setStartState(false);
+
             this.rotatation = 0;
             this.y += frames % 10 === 0 ? Math.sin(frames * RAD) : 0;
             this.frame += frames % 10 === 0 ? 1 : 0;
@@ -252,6 +255,7 @@ export default function FlappyBird() {
             this.speed += this.gravity;
             if (this.y + r >= gnd.y || this.collisioned()) {
               state.curr = state.gameOver;
+              setStartState(true);
               if (setFlappyScore) {
                 // setFlappyScore((prev) => Math.max(0, prev - 2));
               }
@@ -323,8 +327,24 @@ export default function FlappyBird() {
       draw: function () {
         if (state.curr === state.getReady) {
           sctx.drawImage(this.getReady.sprite, 100, 200);
+          // Add mouse instruction text
+          sctx.fillStyle = "#ffffff";
+          sctx.font = "16px Arial";
+          sctx.textAlign = "center";
+          sctx.fillText("Click to start!", scrn.width / 2, 300);
         } else if (state.curr === state.gameOver) {
           sctx.drawImage(this.gameOver.sprite, 100, 200);
+          // Add mouse instruction text
+          sctx.fillStyle = "#ffffff";
+          sctx.font = "16px Arial";
+          sctx.textAlign = "center";
+          sctx.fillText("Click to restart!", scrn.width / 2, 300);
+        } else if (state.curr === state.Play) {
+          // Add instruction during gameplay
+          sctx.fillStyle = "#ffffff";
+          sctx.font = "14px Arial";
+          sctx.textAlign = "center";
+          sctx.fillText("Click to flap!", scrn.width / 2, 50);
         }
       },
     };
@@ -341,29 +361,29 @@ export default function FlappyBird() {
     bird.animations[2].sprite.src = "/img/bird/b2.png";
     bird.animations[3].sprite.src = "/img/bird/b0.png";
 
-    // Keyboard controls
-    function handleKeyDown(e) {
+    // Mouse controls
+    function handleMouseClick(e) {
       if (timer <= 0) return; // disable if timer ended
-      if (e.keyCode === 32 || e.keyCode === 87 || e.keyCode === 38) {
-        switch (state.curr) {
-          case state.getReady:
-            state.curr = state.Play;
-            break;
-          case state.Play:
-            bird.flap();
-            break;
-          case state.gameOver:
-            state.curr = state.getReady;
-            bird.speed = 0;
-            bird.y = 100;
-            pipe.pipes = [];
-            // setFlappyScore(0);
-            break;
-        }
+      e.preventDefault();
+      switch (state.curr) {
+        case state.getReady:
+          state.curr = state.Play;
+          break;
+        case state.Play:
+          bird.flap();
+          break;
+        case state.gameOver:
+          state.curr = state.getReady;
+          bird.speed = 0;
+          bird.y = 100;
+          pipe.pipes = [];
+          // setFlappyScore(0);
+          break;
       }
     }
 
-    window.addEventListener("keydown", handleKeyDown);
+    // Add mouse click event listener to canvas
+    document.addEventListener("click", handleMouseClick);
 
     function gameLoop() {
       update();
@@ -391,10 +411,11 @@ export default function FlappyBird() {
     gameLoop();
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("click", handleMouseClick);
     };
   }, []);
 
+  const {tetriesScore,setTeterisScore,startState,setStartState} =useContext(scoreContext);
   // format mm:ss
   const formatTime = (sec) => {
     const m = Math.floor(sec / 60)
@@ -413,11 +434,11 @@ export default function FlappyBird() {
       }}
     >
       {/* Score + Timer Display */}
-      <div className="absolute top-6 left-6 z-20">
+      <div className="absolute bottom-0 right-6 z-20">
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl border-2 border-yellow-400 relative overflow-hidden">
           {/* Decorative elements */}
-          <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-yellow-200 to-orange-300 rounded-full -translate-y-8 translate-x-8 opacity-30"></div>
-          <div className="absolute bottom-0 left-0 w-12 h-12 bg-gradient-to-tr from-blue-200 to-blue-300 rounded-full translate-y-6 -translate-x-6 opacity-30"></div>
+          {/* <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-yellow-200 to-orange-300 rounded-full -translate-y-8 translate-x-8 opacity-30"></div>
+          <div className="absolute bottom-0 left-0 w-12 h-12 bg-gradient-to-tr from-blue-200 to-blue-300 rounded-full translate-y-6 -translate-x-6 opacity-30"></div> */}
 
           {/* Main score */}
           <div className="text-3xl font-bold text-gray-800 mb-2 text-center relative z-10">
@@ -433,6 +454,8 @@ export default function FlappyBird() {
             <div className="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-full">
               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
               <span className="font-semibold">Circles: {circleScore}</span>
+              <span className="font-semibold">Tetries: {Math.floor(tetriesScore/100)}</span>
+
             </div>
           </div>
 

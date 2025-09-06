@@ -18,11 +18,21 @@ export default function GameOverPage() {
     const savedFullname = localStorage.getItem("fullname") || "";
     const savedUsername = localStorage.getItem("username") || "";
     const savedScore = localStorage.getItem(savedUsername) || 0;
+    const tetrisScore = localStorage.getItem("tetris");
     setUsername(savedUsername);
-    setScore(saved.circleScore + saved.flappyScore);
+    setScore(
+      saved.circleScore +
+        saved.flappyScore +
+        parseInt(Math.floor(tetrisScore / 100))
+    );
     let repsoneT = Math.min(
       10,
-      Math.floor((saved.circleScore + saved.flappyScore) / 5)
+      Math.floor(
+        (saved.circleScore +
+          saved.flappyScore +
+          parseInt(Math.floor(tetrisScore / 100))) /
+          5
+      )
     );
     setResponseTime(repsoneT);
     if (score != 0) {
